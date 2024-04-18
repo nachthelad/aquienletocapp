@@ -1,16 +1,31 @@
-"use client";
 import { useState, useEffect } from "react";
 import NamesList from "../NamesList/page";
 import { shuffle } from "lodash";
+import {
+  Box,
+  Button,
+  Container,
+  TextField,
+  Typography,
+  useTheme,
+  useMediaQuery,
+} from "@mui/material";
 
 export default function MainPage() {
-  const [names, setNames] = useState<string[]>(() => {
-    const savedNames = localStorage.getItem("names");
-    return savedNames ? JSON.parse(savedNames) : [];
-  });
+  const [names, setNames] = useState<string[]>([]);
+  4;
   const [selectedName, setSelectedName] = useState<string | null>(null);
   const [inputName, setInputName] = useState("");
   const [_lastIndex, setLastIndex] = useState<number | null>(null);
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+
+  useEffect(() => {
+    const savedNames = localStorage.getItem("names");
+    if (savedNames) {
+      setNames(JSON.parse(savedNames));
+    }
+  }, []);
 
   useEffect(() => {
     localStorage.setItem("names", JSON.stringify(names));
@@ -63,46 +78,121 @@ export default function MainPage() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-700">
-      <main className="flex flex-col items-center w-full flex-1 px-20 text-center">
-        <h1 className="text-6xl font-bold mb-8">¿A quién le toca?</h1>
-        <div className="flex flex-col md:flex-row items-start justify-between md:space-x-10 border border-blue-300  p-5 rounded-3xl">
-          <div className="flex flex-col items-center w-full md:w-1/2 mt-2">
-            <input
-              type="text"
-              value={inputName}
-              onChange={(e) => setInputName(e.target.value)}
-              onKeyDown={handleKeyDown}
-              placeholder="Ingresá un nombre"
-              className="px-4 py-2 border rounded-3xl shadow text-black"
-            />
-            <button
-              onClick={handleAddName}
-              className="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-3xl"
-            >
-              Agregar
-            </button>
-          </div>
-          <div className="flex flex-col items-center w-full md:w-1/2">
-            <NamesList names={names} onDelete={handleRemoveName} />
-            <button
-              onClick={handleClearNames}
-              className="mt-4 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-3xl"
-            >
-              Vaciar
-            </button>
-          </div>
-        </div>
-        <button
+    <Container
+      component="main"
+      maxWidth="md"
+      sx={{
+        mt: 4,
+        mb: 4,
+        borderRadius: 2,
+      }}
+    >
+      <Typography
+        variant="h4"
+        component="h1"
+        gutterBottom
+        sx={{
+          textAlign: "center",
+          fontWeight: "bold",
+        }}
+      >
+        ¿A quién le toca?
+      </Typography>
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: isMobile ? "column" : "row",
+          justifyContent: "space-around",
+          alignItems: "flex-start",
+          width: "100%",
+          p: 2,
+        }}
+      >
+        <Box
+          sx={{
+            width: isMobile ? "100%" : "30%",
+            marginTop: "auto",
+            marginBottom: "auto",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "space-between",
+          }}
+        >
+          <TextField
+            fullWidth
+            variant="outlined"
+            label="Ingresá un nombre"
+            value={inputName}
+            onChange={(e) => setInputName(e.target.value)}
+            onKeyDown={handleKeyDown}
+            placeholder="Ingresá un nombre"
+            margin="normal"
+            InputLabelProps={{
+              style: {
+                color: "rgb(var(--foreground-rgb))",
+              },
+            }}
+            sx={{
+              mb: 2,
+              borderRadius: "20px",
+              input: { color: "white" },
+              "& .MuiOutlinedInput-root": {
+                "& fieldset": {
+                  borderColor: "white",
+                },
+                "&:hover fieldset": {
+                  borderColor: "white",
+                },
+                "&.Mui-focused fieldset": {
+                  borderColor: "white",
+                },
+              },
+            }}
+          />
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handleAddName}
+            sx={{ width: "100%", borderRadius: "20px" }}
+          >
+            Agregar
+          </Button>
+        </Box>
+        <Box sx={{ width: isMobile ? "100%" : "30%" }}>
+          <NamesList names={names} onDelete={handleRemoveName} />
+          <Button
+            variant="outlined"
+            color="secondary"
+            onClick={handleClearNames}
+            sx={{
+              mt: 2,
+              width: "100%",
+              color: "white",
+              borderColor: "white",
+              borderRadius: "20px",
+            }}
+          >
+            Vaciar
+          </Button>
+        </Box>
+      </Box>
+      <Box sx={{ display: "flex", justifyContent: "center", mt: 2 }}>
+        <Button
+          variant="contained"
+          color="success"
           onClick={handleRandomize}
-          className="mt-4 bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-5 rounded-3xl"
+          sx={{ borderRadius: "20px" }}
         >
           Elegir
-        </button>
-        <p className="mt-4 text-lg font-semibold text-white h-6">
-          {selectedName ? `A ${selectedName} le toca tomar mate!` : ""}
-        </p>
-      </main>
-    </div>
+        </Button>
+      </Box>
+      <Typography
+        variant="h6"
+        color="text.secondary"
+        sx={{ mt: 2, textAlign: "center", color: "rgb(var(--foreground-rgb))" }}
+      >
+        {selectedName ? `A ${selectedName} le toca!` : ""}
+      </Typography>
+    </Container>
   );
 }

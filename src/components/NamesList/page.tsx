@@ -1,4 +1,10 @@
 import React from "react";
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+import ListItemText from "@mui/material/ListItemText";
+import IconButton from "@mui/material/IconButton";
+import Typography from "@mui/material/Typography";
+import { Box } from "@mui/system";
 import { Icon } from "@iconify/react";
 
 type NamesListProps = {
@@ -8,33 +14,37 @@ type NamesListProps = {
 
 const NamesList: React.FC<NamesListProps> = ({ names, onDelete }) => {
   return (
-    <div className="mt-2">
-      <h3 className="text-lg font-semibold">Nombres Cargados:</h3>
-      {names.length > 0 ? (
-        <ul className="list-disc list-inside">
-          {names.map((name, index) => (
-            <li
+    <Box sx={{ width: "100%", bgcolor: "background.paper" }}>
+      <List dense={true}>
+        {names.length > 0 ? (
+          names.map((name, index) => (
+            <ListItem
               key={index}
-              className="text-white flex justify-between items-center"
+              secondaryAction={
+                <IconButton
+                  edge="end"
+                  aria-label="delete"
+                  onClick={() => onDelete(index)}
+                  sx={{ color: "white" }}
+                >
+                  <Icon
+                    icon="mingcute:delete-line"
+                    width="1.3rem"
+                    height="1.3rem"
+                  />
+                </IconButton>
+              }
             >
-              {name}
-              <button
-                onClick={() => onDelete(index)}
-                className="text-red-500 hover:text-red-700 ml-4"
-              >
-                <Icon
-                  icon="mingcute:delete-line"
-                  width="1.3rem"
-                  height="1.3rem"
-                />
-              </button>
-            </li>
-          ))}
-        </ul>
-      ) : (
-        <p className="text-gray-300">No hay nombres cargados aún.</p>
-      )}
-    </div>
+              <ListItemText primary={name} />
+            </ListItem>
+          ))
+        ) : (
+          <ListItem>
+            <ListItemText primary="Aún no hay nombres cargados." />
+          </ListItem>
+        )}
+      </List>
+    </Box>
   );
 };
 
