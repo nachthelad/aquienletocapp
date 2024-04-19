@@ -1,9 +1,5 @@
 import React from "react";
-import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
-import ListItemText from "@mui/material/ListItemText";
-import IconButton from "@mui/material/IconButton";
-import Typography from "@mui/material/Typography";
+import { List, ListItem, ListItemText, IconButton } from "@mui/material";
 import { Box } from "@mui/system";
 import { Icon } from "@iconify/react";
 
@@ -20,6 +16,13 @@ const NamesList: React.FC<NamesListProps> = ({ names, onDelete }) => {
           names.map((name, index) => (
             <ListItem
               key={index}
+              onClick={() => onDelete(index)}
+              sx={{
+                borderRadius: "5px",
+                margin: "5px",
+                backgroundColor: "#333",
+                cursor: "pointer",
+              }}
               secondaryAction={
                 <IconButton
                   edge="end"
