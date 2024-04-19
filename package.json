@@ -10,15 +10,13 @@
   },
   "dependencies": {
     "@ducanh2912/next-pwa": "^10.2.6",
-    "@egjs/react-flicking": "^4.11.2",
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.5",
     "@mui/material": "^5.15.15",
     "lodash": "^4.17.21",
     "next": "14.2.2",
     "react": "^18",
-    "react-dom": "^18",
-    "react-slick": "^0.30.2"
+    "react-dom": "^18"
   },
   "devDependencies": {
     "@iconify/react": "^4.1.1",
@@ -26,8 +24,6 @@
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
-    "@types/react-slick": "^0.23.13",
-    "@types/swiper": "^6.0.0",
     "eslint": "^8",
     "eslint-config-next": "14.2.2",
     "typescript": "^5"
