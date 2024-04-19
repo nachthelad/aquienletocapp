@@ -1,17 +1,16 @@
 import { useState, useEffect } from "react";
 import NamesList from "../NamesList/page";
+import NameField from "../NameField/page";
 import { shuffle } from "lodash";
 import {
   Box,
   Button,
   Container,
-  TextField,
   Typography,
   useTheme,
   useMediaQuery,
-  Snackbar,
-  Alert,
 } from "@mui/material";
+import SnackbarMessage from "../Snackbar/page";
 
 export default function MainPage() {
   const [names, setNames] = useState<string[]>([]);
@@ -22,8 +21,6 @@ export default function MainPage() {
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
-  const vertical = "top";
-  const horizontal = "center";
 
   useEffect(() => {
     const savedNames = localStorage.getItem("names");
@@ -95,14 +92,12 @@ export default function MainPage() {
   return (
     <>
       <Container
-        component="main"
-        maxWidth="md"
         sx={{
-          mt: 4,
-          mb: 4,
           borderRadius: 3,
-          border: "1px solid white",
+          border: isMobile ? "0" : "1px solid white",
           p: 2,
+          my: isMobile ? 1 : 4,
+          width: "80%",
         }}
       >
         <Typography
@@ -110,8 +105,10 @@ export default function MainPage() {
           component="h1"
           gutterBottom
           sx={{
+            fontSize: "2rem",
             textAlign: "center",
             fontWeight: "bold",
+            whiteSpace: "nowrap",
           }}
         >
           ¿A quién le toca?
@@ -134,47 +131,14 @@ export default function MainPage() {
               display: "flex",
               alignItems: "center",
               flexDirection: "column",
-              justifyContent: "space-between",
             }}
           >
-            <TextField
-              fullWidth
-              variant="outlined"
-              label="Ingresá un nombre"
-              value={inputName}
-              onChange={(e) => setInputName(e.target.value)}
-              onKeyDown={handleKeyDown}
-              margin="normal"
-              InputLabelProps={{
-                style: {
-                  color: "rgb(var(--foreground-rgb))",
-                },
-              }}
-              sx={{
-                mb: 2,
-                borderRadius: "20px",
-                input: { color: "white" },
-                "& .MuiOutlinedInput-root": {
-                  "& fieldset": {
-                    borderColor: "white",
-                  },
-                  "&:hover fieldset": {
-                    borderColor: "white",
-                  },
-                  "&.Mui-focused fieldset": {
-                    borderColor: "white",
-                  },
-                },
-              }}
+            <NameField
+              inputName={inputName}
+              setInputName={setInputName}
+              handleAddName={handleAddName}
+              handleKeyDown={handleKeyDown}
             />
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={handleAddName}
-              sx={{ borderRadius: "20px" }}
-            >
-              Agregar
-            </Button>
           </Box>
           <Box
             sx={{
@@ -184,20 +148,11 @@ export default function MainPage() {
               flexDirection: "column",
             }}
           >
-            <NamesList names={names} onDelete={handleRemoveName} />
-            <Button
-              variant="outlined"
-              color="secondary"
-              onClick={handleClearNames}
-              sx={{
-                color: "white",
-                borderColor: "white",
-                borderRadius: "20px",
-                width: "50%",
-              }}
-            >
-              Vaciar
-            </Button>
+            <NamesList
+              names={names}
+              onDelete={handleRemoveName}
+              handleClearNames={handleClearNames}
+            />
           </Box>
         </Box>
         <Box sx={{ display: "flex", justifyContent: "center", mt: 2 }}>
@@ -227,7 +182,7 @@ export default function MainPage() {
                 mt: 2,
                 color: "rgb(var(--foreground-rgb))",
                 borderRadius: "5px",
-                width: "30%",
+                width: isMobile ? "100%" : "25%",
                 backgroundColor: "#333",
                 cursor: "pointer",
               }}
@@ -237,20 +192,11 @@ export default function MainPage() {
           </Box>
         )}
       </Container>
-      <Snackbar
-        anchorOrigin={{ vertical, horizontal }}
-        open={openSnackbar}
-        autoHideDuration={2000}
-        onClose={() => setOpenSnackbar(false)}
-      >
-        <Alert
-          onClose={() => setOpenSnackbar(false)}
-          severity="error"
-          sx={{ width: "100%" }}
-        >
-          {snackbarMessage}
-        </Alert>
-      </Snackbar>
+      <SnackbarMessage
+        openSnackbar={openSnackbar}
+        setOpenSnackbar={setOpenSnackbar}
+        snackbarMessage={snackbarMessage}
+      />
     </>
   );
 }

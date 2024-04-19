@@ -1,17 +1,44 @@
 import React from "react";
-import { List, ListItem, ListItemText, IconButton } from "@mui/material";
+import {
+  List,
+  ListItem,
+  ListItemText,
+  IconButton,
+  Button,
+  Typography,
+} from "@mui/material";
 import { Box } from "@mui/system";
 import { Icon } from "@iconify/react";
 
 type NamesListProps = {
   names: string[];
   onDelete: (index: number) => void;
+  handleClearNames: () => void;
 };
 
-const NamesList: React.FC<NamesListProps> = ({ names, onDelete }) => {
+export default function NamesList({
+  names,
+  onDelete,
+  handleClearNames,
+}: NamesListProps) {
   return (
-    <Box sx={{ width: "100%", bgcolor: "background.paper" }}>
-      <List dense={true}>
+    <Box
+      sx={{
+        width: "100%",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+      }}
+    >
+      <List
+        dense={true}
+        sx={{
+          width: "100%",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+        }}
+      >
         {names.length > 0 ? (
           names.map((name, index) => (
             <ListItem
@@ -22,6 +49,7 @@ const NamesList: React.FC<NamesListProps> = ({ names, onDelete }) => {
                 margin: "5px",
                 backgroundColor: "#333",
                 cursor: "pointer",
+                width: "80%",
               }}
               secondaryAction={
                 <IconButton
@@ -38,17 +66,33 @@ const NamesList: React.FC<NamesListProps> = ({ names, onDelete }) => {
                 </IconButton>
               }
             >
-              <ListItemText primary={name} />
+              <ListItemText
+                primary={name.charAt(0).toUpperCase() + name.slice(1)}
+              />
             </ListItem>
           ))
         ) : (
-          <ListItem>
-            <ListItemText primary="Aún no hay nombres cargados." />
-          </ListItem>
+          <Typography variant="caption" sx={{ fontSize: "0.9rem" }}>
+            Aún no hay nombres cargados.
+          </Typography>
+        )}
+        {names.length > 1 && (
+          <Button
+            variant="outlined"
+            color="secondary"
+            onClick={handleClearNames}
+            sx={{
+              color: "white",
+              borderColor: "white",
+              borderRadius: "20px",
+              width: "40%",
+              mt: "5px",
+            }}
+          >
+            Vaciar
+          </Button>
         )}
       </List>
     </Box>
   );
-};
-
-export default NamesList;
+}
