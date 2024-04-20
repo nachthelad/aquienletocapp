@@ -6,8 +6,8 @@ import {
   IconButton,
   Button,
   Typography,
+  Box,
 } from "@mui/material";
-import { Box } from "@mui/system";
 import { Icon } from "@iconify/react";
 
 type NamesListProps = {

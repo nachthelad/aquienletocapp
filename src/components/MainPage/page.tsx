@@ -187,7 +187,9 @@ export default function MainPage() {
                 cursor: "pointer",
               }}
             >
-              {`¡Le toca a ${selectedName}! `}
+              {`¡Le toca a ${
+                selectedName.charAt(0).toUpperCase() + selectedName.slice(1)
+              }! `}
             </Typography>
           </Box>
         )}
